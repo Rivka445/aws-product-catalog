@@ -1,59 +1,68 @@
-# CloudCatalog
+# AWS Product Catalog
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+A serverless product catalog web application built with **Angular** and **AWS**.  
+Users can browse products by category and view full product details — all data is fetched live from the cloud.
 
-## Development server
+## Architecture
 
-To start a local development server, run:
+```
+Angular App (Frontend)
+       │
+       ├── Category selected → AWS Lambda (Query) → DynamoDB
+       │                        Returns list of products by category
+       │
+       └── Product selected → AWS Lambda (GetItem) → DynamoDB
+                               Returns full details of a single product
+```
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Frontend | Angular 21 (standalone components, zoneless) |
+| Backend | AWS Lambda (Node.js) |
+| Database | Amazon DynamoDB |
+| API | AWS Lambda Function URLs |
+
+## Features
+
+- Browse products by category
+- View full product details
+- Serverless backend — no server to manage
+- CORS-enabled Lambda functions
+
+## Project Structure
+
+```
+src/app/
+├── product-list/        # Category selector + product list
+├── product-detail/      # Single product detail view
+├── services/
+│   └── product.ts       # HTTP calls to Lambda functions
+└── app.routes.ts        # Application routing
+```
+
+## AWS Lambda Functions
+
+| Function | Trigger | Description |
+|----------|---------|-------------|
+| Query Lambda | `?category=<code>` | Returns all products in a category |
+| GetItem Lambda | `?category=<code>&productId=<id>` | Returns a single product |
+
+## DynamoDB Table
+
+**Table name:** `ProductsCatalog`
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `CategoryCode` | Partition Key | Product category (e.g. `CAT_CLOTHES`) |
+| `ProductId` | Sort Key | Unique product identifier |
+
+## Getting Started
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Open `http://localhost:4200` in your browser.
