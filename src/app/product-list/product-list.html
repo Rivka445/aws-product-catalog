@@ -1,0 +1,28 @@
+<div style="direction: rtl; padding: 20px; font-family: Arial, sans-serif;">
+  <h2>קטלוג מוצרים בענן - דף קטגוריות</h2>
+  
+  <div style="margin-bottom: 20px;">
+    <h3>בחר קטגוריה:</h3>
+    @for (cat of categories; track cat.code) {
+      <button (click)="selectCategory(cat)" style="margin: 5px; padding: 10px 20px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 4px;">
+        {{ cat.name }}
+      </button>
+    }
+  </div>
+
+  <hr>
+
+  @if (products.length > 0) {
+    <div>
+      <h3>מוצרים בקטגוריית: {{ selectedCategoryName }}</h3>
+      <ul>
+        @for (prod of products; track prod.ProductId) {
+          <li style="margin: 10px 0; font-size: 18px;">
+            <strong>{{ prod.ProductName }}</strong> - {{ prod.Price }} ש"ח
+            <button (click)="viewProduct(prod)" style="margin-right: 10px; cursor: pointer;">הצג מוצר מלא</button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</div>
